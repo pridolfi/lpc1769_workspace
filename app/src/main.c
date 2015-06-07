@@ -104,8 +104,6 @@ void SysTick_Handler(void)
 
 int main(void)
 {
-	int i;
-
 	initHardware();
 
 	while(1)
@@ -119,4 +117,3 @@ int main(void)
 /** @} doxygen end group definition */
 
 /*==================[end of file]============================================*/
-
