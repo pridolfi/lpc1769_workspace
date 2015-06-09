@@ -21,7 +21,7 @@ OBJ_FILES := $(subst $(SRC_PATH),$(OBJ_PATH),$(SRC_FILES:.c=.o))
 $(PROJECT): $(OBJ_FILES)
 	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(PROJECT).axf $(OBJ_FILES) $(LIBS) 
 	arm-none-eabi-size $(OUT_PATH)/$(PROJECT).axf
-	arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(PROJECT).axf $(OUT_PATH)/$(PROJECT).bin ; # checksum -p LPC1769 -d "i2c.bin";
+	arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(PROJECT).axf $(OUT_PATH)/$(PROJECT).bin
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $@ 

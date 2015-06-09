@@ -10,8 +10,6 @@ SYMBOLS   := -DDEBUG -DCORE_M3 -D__USE_LPCOPEN -D__LPC17XX__
 INCLUDES  := -I./inc
 CFLAGS    := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -c
 
-LFLAGS    := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb
-
 SRC_FILES := $(wildcard $(SRC_PATH)/*.c)
 INC_FILES := $(wildcard $(INC_PATH)/*.h)
 OBJ_FILES := $(subst $(SRC_PATH),$(OBJ_PATH),$(SRC_FILES:.c=.o))
