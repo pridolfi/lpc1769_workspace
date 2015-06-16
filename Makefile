@@ -1,8 +1,14 @@
+PROJECTS := ./lpc_chip_175x_6x ./lpc_board_nxp_lpcxpresso_1769 ./app
+
 all:
-	make -C ./lpc_chip_175x_6x
-	make -C ./lpc_board_nxp_lpcxpresso_1769
-	make -C ./app	
+	@for PROJECT in $(PROJECTS) ; do \
+		echo "*** Building project $$PROJECT ***" ; \
+		make -C $$PROJECT ; \
+		echo "" ; \
+	done
 clean:
-	make clean -C ./lpc_chip_175x_6x
-	make clean -C ./lpc_board_nxp_lpcxpresso_1769
-	make clean -C ./app
+	@for PROJECT in $(PROJECTS) ; do \
+		echo "*** Cleaning project $$PROJECT ***" ; \
+		make clean -C $$PROJECT ; \
+		echo "" ; \
+	done
