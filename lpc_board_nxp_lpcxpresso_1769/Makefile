@@ -1,33 +1,25 @@
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-PROJECT := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+PROJECT := $(notdir $(shell pwd))
 
 LPROJECT  := lib$(PROJECT).a
 
-SRC_PATH  := ./src
-INC_PATH  := ./inc
-OUT_PATH  := ./out
-OBJ_PATH  := $(OUT_PATH)/obj
+SRC_PATH  := src
+INC_PATH  := inc
 
-SYMBOLS   := -DDEBUG -DCORE_M3 -D__USE_LPCOPEN -D__LPC17XX__
-INCLUDES  := -I./inc -I../lpc_chip_175x_6x/inc
-CFLAGS    := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -c
+INCLUDES  := -Iinc -I../lpc_chip_175x_6x/inc
 
 SRC_FILES := $(wildcard $(SRC_PATH)/*.c)
-INC_FILES := $(wildcard $(INC_PATH)/*.h)
 OBJ_FILES := $(subst $(SRC_PATH),$(OBJ_PATH),$(SRC_FILES:.c=.o))
+OBJS 		 := $(notdir $(OBJ_FILES))
 
-$(LPROJECT): $(OBJ_FILES)
+vpath %.c $(SRC_PATH)
+
+%.o: %.c
+	@echo "*** Compiling C file $< ***"
+	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
+	@echo ""
+
+$(LPROJECT): $(OBJS)
 	@echo "*** Archiving project $(PROJECT) ***"
 	arm-none-eabi-ar -r $(OUT_PATH)/$(LPROJECT) $(OBJ_FILES)
 	arm-none-eabi-size $(OUT_PATH)/$(LPROJECT)
 	@echo ""
-
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
-	@echo "*** Compiling C file $< ***"
-	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $@ 
-	@echo ""
-
-clean:
-	rm -f $(OBJ_PATH)/*.*
-	rm -f $(OUT_PATH)/*.*
-
