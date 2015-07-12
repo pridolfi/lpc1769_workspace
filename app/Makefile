@@ -3,7 +3,7 @@ PROJECT := $(notdir $(shell pwd))
 SRC_PATH  := src
 INC_PATH  := inc
 
-INCLUDES := -I./inc -I../lpc_chip_175x_6x/inc -I../lpc_board_nxp_lpcxpresso_1769/inc
+INCLUDES := -Iinc -I../lpc_chip_175x_6x/inc -I../lpc_board_nxp_lpcxpresso_1769/inc
 
 LIB_PATH := -L$(OUT_PATH)
 LIBS	 := -llpc_board_nxp_lpcxpresso_1769 -llpc_chip_175x_6x
