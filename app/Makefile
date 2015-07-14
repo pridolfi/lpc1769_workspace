@@ -3,7 +3,8 @@ PROJECT := $(notdir $(shell pwd))
 SRC_PATH  := src
 INC_PATH  := inc
 
-INCLUDES := -Iinc -I../lpc_chip_175x_6x/inc -I../lpc_board_nxp_lpcxpresso_1769/inc
+INCLUDES := -Iinc -I../lpc_chip_175x_6x/inc \
+-I../lpc_board_nxp_lpcxpresso_1769/inc
 
 LIB_PATH := -L$(OUT_PATH)
 LIBS	 := -llpc_board_nxp_lpcxpresso_1769 -llpc_chip_175x_6x
@@ -30,7 +31,9 @@ vpath %.S $(SRC_PATH)
 
 $(PROJECT): $(OBJS)
 	@echo "*** Linking project $(PROJECT) ***"
-	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(PROJECT).axf $(OBJ_FILES) $(LIBS)
+	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) \
+-o $(OUT_PATH)/$(PROJECT).axf $(OBJ_FILES) $(LIBS)
 	arm-none-eabi-size $(OUT_PATH)/$(PROJECT).axf
-	arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(PROJECT).axf $(OUT_PATH)/$(PROJECT).bin
+	arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(PROJECT).axf \
+$(OUT_PATH)/$(PROJECT).bin
 	@echo ""
