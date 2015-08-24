@@ -9,7 +9,7 @@ INCLUDES  := -Iinc -I../lpc_chip_175x_6x/inc
 
 SRC_FILES := $(wildcard $(SRC_PATH)/*.c)
 OBJ_FILES := $(subst $(SRC_PATH),$(OBJ_PATH),$(SRC_FILES:.c=.o))
-OBJS 		 := $(notdir $(OBJ_FILES))
+OBJS 	  := $(notdir $(OBJ_FILES))
 
 vpath %.c $(SRC_PATH)
 

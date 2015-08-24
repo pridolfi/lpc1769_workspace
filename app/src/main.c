@@ -105,7 +105,7 @@ int main(void)
 
 	xTaskCreate(task, (signed const char *)"task", 1024, 0, tskIDLE_PRIORITY+1, 0);
 
-   vTaskStartScheduler();
+	vTaskStartScheduler();
 
 	while(1);
 }

@@ -29,7 +29,7 @@ vpath %.a $(OUT_PATH)
 	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
 	@echo ""
 
-$(PROJECT): $(OBJS) libfreertos.a liblpc_board_nxp_lpcxpresso_1769.a liblpc_chip_175x_6x.a
+$(PROJECT): $(OBJS)
 	@echo "*** Linking project $(APPLICATION) ***"
 	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(OBJ_FILES) $(LIBS)
 	arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
