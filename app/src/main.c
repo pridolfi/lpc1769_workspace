@@ -55,9 +55,10 @@
 
 /*==================[inclusions]=============================================*/
 
+#include "FreeRTOS.h"
 #include "board.h"
-
 #include "main.h"
+#include "task.h"
 
 /*==================[macros and definitions]=================================*/
 
@@ -71,8 +72,6 @@
 static void initHardware(void);
 
 /*==================[internal data definition]===============================*/
-
-static uint32_t cont;
 
 /*==================[external data definition]===============================*/
 
@@ -89,28 +88,26 @@ static void initHardware(void)
     SysTick_Config(SystemCoreClock/1000);
 }
 
-static void pausems(uint32_t t)
+static void task(void * p)
 {
-	cont = t;
-	while(cont) __WFI();
+   while (1)
+   {
+      Board_LED_Toggle(0);
+      vTaskDelay(200 / portTICK_RATE_MS);
+   }
 }
 
 /*==================[external functions definition]==========================*/
-
-void SysTick_Handler(void)
-{
-	if(cont) cont --;
-}
 
 int main(void)
 {
 	initHardware();
 
-	while(1)
-	{
-		Board_LED_Toggle(0);
-		pausems(250);
-	}
+	xTaskCreate(task, (signed const char *)"task", 1024, 0, tskIDLE_PRIORITY+1, 0);
+
+   vTaskStartScheduler();
+
+	while(1);
 }
 
 /** @} doxygen end group definition */
