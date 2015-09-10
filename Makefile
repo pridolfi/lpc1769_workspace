@@ -24,6 +24,7 @@ export LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$
 
 # Add object path to search paths
 vpath %.o $(OBJ_PATH)
+vpath %.a $(OUT_PATH)
 
 # All rule: Compile all libs and executables
 all:

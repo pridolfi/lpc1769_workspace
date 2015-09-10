@@ -11,6 +11,8 @@ SRC_FILES := $(wildcard $(SRC_PATH)/*.c)
 OBJ_FILES := $(subst $(SRC_PATH),$(OBJ_PATH),$(SRC_FILES:.c=.o))
 OBJS 		 := $(notdir $(OBJ_FILES))
 
+vpath %.a $(OUT_PATH)
+vpath %.o $(OBJ_PATH)
 vpath %.c $(SRC_PATH)
 
 %.o: %.c

@@ -15,9 +15,10 @@ OBJ_FILES := $(subst $(SRC_PATH),$(OBJ_PATH),$(SRC_FILES:.c=.o))
 OBJ_FILES += $(subst $(SRC_PATH),$(OBJ_PATH),$(ASM_FILES:.S=.o))
 OBJS := $(notdir $(OBJ_FILES))
 
-vpath %.c $(SRC_PATH)
 vpath %.S $(SRC_PATH)
 vpath %.a $(OUT_PATH)
+vpath %.o $(OBJ_PATH)
+vpath %.c $(SRC_PATH)
 
 %.o: %.c
 	@echo "*** Compiling C file $< ***"
@@ -29,7 +30,7 @@ vpath %.a $(OUT_PATH)
 	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
 	@echo ""
 
-$(PROJECT): $(OBJS)
+$(APPLICATION): $(OBJS)
 	@echo "*** Linking project $(APPLICATION) ***"
 	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(OBJ_FILES) $(LIBS)
 	arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
