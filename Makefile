@@ -2,7 +2,7 @@
 export APPLICATION  := $(notdir $(shell pwd))
 
 # List of libraries and project to be compiled
-PROJECTS := lpc_chip_175x_6x lpc_board_nxp_lpcxpresso_1769 freertos app
+PROJECTS := lpc_chip_175x_6x lpc_board_nxp_lpcxpresso_1769 freertos lwip app
 
 # Paths
 ROOT_PATH := $(shell pwd)
