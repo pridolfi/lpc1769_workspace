@@ -3,10 +3,10 @@ PROJECT := $(notdir $(shell pwd))
 SRC_PATH  := src
 INC_PATH  := inc
 
-INCLUDES := -Iinc -I../lpc_chip_175x_6x/inc -I../lpc_board_nxp_lpcxpresso_1769/inc -I../freertos/inc
+INCLUDES := -Iinc -I../lpc_chip_175x_6x/inc -I../lpc_board_nxp_lpcxpresso_1769/inc -I../freertos/inc -I../lwip/inc -I../lwip/inc/ipv4
 
 LIB_PATH := -L$(OUT_PATH)
-LIBS	 := -lfreertos -llpc_board_nxp_lpcxpresso_1769 -llpc_chip_175x_6x
+LIBS	 := -llwip -lfreertos -llpc_board_nxp_lpcxpresso_1769 -llpc_chip_175x_6x
 LD_FILE  := -T./ld/lpc17xx.ld
 
 SRC_FILES := $(wildcard $(SRC_PATH)/*.c)

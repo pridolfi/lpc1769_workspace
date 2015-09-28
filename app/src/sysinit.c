@@ -2,7 +2,7 @@
  * @brief Common SystemInit function for LPC17xx/40xx chips
  *
  * @note
- * Copyright(C) NXP Semiconductors, 2013-14
+ * Copyright(C) NXP Semiconductors, 2013
  * All rights reserved.
  *
  * @par
@@ -29,11 +29,7 @@
  * this code.
  */
 
- #if defined(NO_BOARD_LIB)
- #include "chip.h"
- #else
  #include "board.h"
- #endif
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -42,11 +38,6 @@
 /*****************************************************************************
  * Public types/enumerations/variables
  ****************************************************************************/
-
-#if defined(NO_BOARD_LIB)
-const uint32_t OscRateIn = 12000000;
-const uint32_t RTCOscRateIn = 32768;
-#endif
 
 /*****************************************************************************
  * Private functions

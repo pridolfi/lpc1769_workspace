@@ -17,16 +17,20 @@ export OBJ_PATH := $(OUT_PATH)/obj
 export SYMBOLS := -DDEBUG -DCORE_M3 -D__USE_LPCOPEN -D__LPC17XX__ -D__CODE_RED
 
 # Compilation flags
-export CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections -c
+#export CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections -c
+export CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -c
 
 # Linking flags
-export LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PATH)/$(PROJECT).map -Wl,--gc-sections
+#export LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PATH)/$(PROJECT).map -Wl,--gc-sections
+export LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PATH)/$(PROJECT).map
 
 # Add object path to search paths
 vpath %.o $(OBJ_PATH)
 vpath %.a $(OUT_PATH)
 
 # All rule: Compile all libs and executables
+all: $(APPLICATION)
+
 $(APPLICATION):
 	@for PROJECT in $(PROJECTS) ; do \
 		echo "*** Building project $$PROJECT ***" ; \

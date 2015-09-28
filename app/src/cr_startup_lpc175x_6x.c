@@ -1,7 +1,7 @@
 //*****************************************************************************
 // LPC175x_6x Microcontroller Startup code for use with LPCXpresso IDE
 //
-// Version : 141204
+// Version : 140114
 //*****************************************************************************
 //
 // Copyright(C) NXP Semiconductors, 2014
@@ -154,7 +154,7 @@ extern void _vStackTop(void);
 //
 //*****************************************************************************
 extern void (* const g_pfnVectors[])(void);
-__attribute__ ((used,section(".isr_vector")))
+__attribute__ ((section(".isr_vector")))
 void (* const g_pfnVectors[])(void) = {
     // Core Level - CM3
     &_vStackTop, // The initial stack pointer

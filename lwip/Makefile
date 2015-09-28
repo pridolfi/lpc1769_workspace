@@ -10,6 +10,7 @@ INCLUDES  := -Iinc -Iinc/ipv4 -I../lpc_chip_175x_6x/inc -I../lpc_board_nxp_lpcxp
 SRC_FILES := $(wildcard $(SRC_PATH)/api/*.c)
 SRC_FILES += $(wildcard $(SRC_PATH)/arch/*.c)
 SRC_FILES += $(wildcard $(SRC_PATH)/core/*.c)
+SRC_FILES += $(wildcard $(SRC_PATH)/core/ipv4/*.c)
 SRC_FILES += $(wildcard $(SRC_PATH)/netif/*.c)
 
 OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(SRC_FILES:.c=.o)))
@@ -18,7 +19,7 @@ OBJS 		 := $(notdir $(OBJ_FILES))
 
 vpath %.a $(OUT_PATH)
 vpath %.o $(OBJ_PATH)
-vpath %.c $(SRC_PATH)/api $(SRC_PATH)/arch $(SRC_PATH)/core $(SRC_PATH)/netif
+vpath %.c $(SRC_PATH)/api $(SRC_PATH)/arch $(SRC_PATH)/core $(SRC_PATH)/core/ipv4 $(SRC_PATH)/netif
 
 %.o: %.c
 	@echo "*** Compiling C file $< ***"
