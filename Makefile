@@ -1,11 +1,5 @@
 # Application to be compiled
-PROJECT := app
-
-# Modules needed by application
-MODULES := lpc_chip_175x_6x lpc_board_nxp_lpcxpresso_1769 freertos lwip
-
-# Paths
-ROOT_PATH := $(shell pwd)
+PROJECT_PATH := examples/freertos_blink
 
 # Path for compiled files (libraries and binaries)
 OUT_PATH := out
@@ -20,16 +14,16 @@ SYMBOLS := -DDEBUG -DCORE_M3 -D__USE_LPCOPEN -D__LPC17XX__ -D__CODE_RED
 CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections -c
 
 # Linking flags
-LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PATH)/$(PROJECT).map -Wl,--gc-sections
+LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PATH)/$(APPLICATION).map -Wl,--gc-sections
 
 # Linker scripts
 LD_FILE := -Tld/lpc17xx.ld
 
+# include project Makefile
+include $(PROJECT_PATH)/Makefile
+
 # include modules Makefiles
 include $(foreach MOD,$(MODULES),modules/$(MOD)/Makefile)
-
-# include project Makefile
-include $(PROJECT)/Makefile
 
 # object files
 OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(C_FILES:.c=.o)))
@@ -45,7 +39,7 @@ vpath %.c $(SRC_FOLDERS)
 vpath %.S $(SRC_FOLDERS)
 
 # All rule: Compile all libs and executables
-all: $(PROJECT)
+all: $(APPLICATION)
 
 %.o: %.c
 	@echo "*** Compiling C file $< ***"
@@ -57,7 +51,7 @@ all: $(PROJECT)
 	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
 	@echo ""
 
-$(PROJECT): $(OBJS)
+$(APPLICATION): $(OBJS)
 	@echo "*** Linking project $(APPLICATION) ***"
 	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(OBJ_FILES)
 	arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
