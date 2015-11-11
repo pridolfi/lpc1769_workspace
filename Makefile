@@ -1,40 +1,68 @@
-# User project folder
-export APPLICATION  := $(notdir $(shell pwd))
+# Application to be compiled
+PROJECT := app
 
-# List of libraries and project to be compiled
-PROJECTS := lpc_chip_175x_6x lpc_board_nxp_lpcxpresso_1769 freertos lwip app
+# Modules needed by application
+MODULES := lpc_chip_175x_6x lpc_board_nxp_lpcxpresso_1769 freertos lwip
 
 # Paths
 ROOT_PATH := $(shell pwd)
 
 # Path for compiled files (libraries and binaries)
-export OUT_PATH := $(ROOT_PATH)/out
+OUT_PATH := out
 
 # Path for object files
-export OBJ_PATH := $(OUT_PATH)/obj
+OBJ_PATH := $(OUT_PATH)/obj
 
 # Defined symbols
-export SYMBOLS := -DDEBUG -DCORE_M3 -D__USE_LPCOPEN -D__LPC17XX__ -D__CODE_RED
+SYMBOLS := -DDEBUG -DCORE_M3 -D__USE_LPCOPEN -D__LPC17XX__ -D__CODE_RED
 
 # Compilation flags
-export CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections -c
+CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections -c
 
 # Linking flags
-export LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PATH)/$(PROJECT).map -Wl,--gc-sections
+LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PATH)/$(PROJECT).map -Wl,--gc-sections
+
+# Linker scripts
+LD_FILE := -Tld/lpc17xx.ld
+
+# include modules Makefiles
+include $(foreach MOD,$(MODULES),modules/$(MOD)/Makefile)
+
+# include project Makefile
+include $(PROJECT)/Makefile
+
+# object files
+OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(C_FILES:.c=.o)))
+OBJ_FILES += $(addprefix $(OBJ_PATH)/,$(notdir $(ASM_FILES:.S=.o)))
+OBJS := $(notdir $(OBJ_FILES))
+
+# include paths
+INCLUDES := $(addprefix -I,$(INC_FOLDERS))
 
 # Add object path to search paths
 vpath %.o $(OBJ_PATH)
-vpath %.a $(OUT_PATH)
+vpath %.c $(SRC_FOLDERS)
+vpath %.S $(SRC_FOLDERS)
 
 # All rule: Compile all libs and executables
-all: $(APPLICATION)
+all: $(PROJECT)
 
-$(APPLICATION):
-	@for PROJECT in $(PROJECTS) ; do \
-		echo "*** Building project $$PROJECT ***" ; \
-		make -C $$PROJECT ; \
-		echo "" ; \
-	done
+%.o: %.c
+	@echo "*** Compiling C file $< ***"
+	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
+	@echo ""
+
+%.o: %.S
+	@echo "*** Compiling Assembly file $< ***"
+	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
+	@echo ""
+
+$(PROJECT): $(OBJS)
+	@echo "*** Linking project $(APPLICATION) ***"
+	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(OBJ_FILES)
+	arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
+	arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
+	@echo ""
 
 # Clean rule: remove generated files and objects
 clean:
@@ -50,3 +78,10 @@ erase:
 	@echo "Erasing flash memory..."
 	openocd -f cfg/lpc1769.cfg -c "init" -c "halt 0" -c "flash erase_sector 0 0 last" -c "exit"
 	@echo "Erase done."
+
+info:
+	@echo C_FILES: $(C_FILES)
+	@echo OBJ_FILES: $(OBJ_FILES)
+	@echo OBJS: $(OBJS)
+	@echo INCLUDES: $(INCLUDES)
+	@echo SRC_FOLDERS: $(SRC_FOLDERS)

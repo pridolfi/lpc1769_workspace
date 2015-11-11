@@ -1,38 +1,8 @@
-PROJECT := $(notdir $(shell pwd))
+APPLICATION := app
 
-SRC_PATH  := src
-INC_PATH  := inc
+SRC_FOLDERS += app/src
 
-INCLUDES := -Iinc -I../lpc_chip_175x_6x/inc -I../lpc_board_nxp_lpcxpresso_1769/inc -I../freertos/inc -I../lwip/inc -I../lwip/inc/ipv4
+C_FILES += $(wildcard $(APPLICATION)/src/*.c)
+ASM_FILES += $(wildcard $(APPLICATION)/src/*.S)
 
-LIB_PATH := -L$(OUT_PATH)
-LIBS	 := -llwip -lfreertos -llpc_board_nxp_lpcxpresso_1769 -llpc_chip_175x_6x
-LD_FILE  := -T./ld/lpc17xx.ld
-
-SRC_FILES := $(wildcard $(SRC_PATH)/*.c)
-ASM_FILES := $(wildcard $(SRC_PATH)/*.S)
-OBJ_FILES := $(subst $(SRC_PATH),$(OBJ_PATH),$(SRC_FILES:.c=.o))
-OBJ_FILES += $(subst $(SRC_PATH),$(OBJ_PATH),$(ASM_FILES:.S=.o))
-OBJS := $(notdir $(OBJ_FILES))
-
-vpath %.S $(SRC_PATH)
-vpath %.a $(OUT_PATH)
-vpath %.o $(OBJ_PATH)
-vpath %.c $(SRC_PATH)
-
-%.o: %.c
-	@echo "*** Compiling C file $< ***"
-	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
-	@echo ""
-
-%.o: %.S
-	@echo "*** Compiling Assembly file $< ***"
-	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
-	@echo ""
-
-$(APPLICATION): $(OBJS)
-	@echo "*** Linking project $(APPLICATION) ***"
-	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(OBJ_FILES) $(LIBS)
-	arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
-	arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
-	@echo ""
+INC_FOLDERS += $(APPLICATION)/inc

@@ -8,21 +8,21 @@
  */
 
 
-INCLUDE "./ld/lpc17xx_lib.ld"
-INCLUDE "./ld/lpc17xx_mem.ld"
+INCLUDE "ld/lpc17xx_lib.ld"
+INCLUDE "ld/lpc17xx_mem.ld"
 
 ENTRY(ResetISR)
 
 SECTIONS
 {
 
-    /* MAIN TEXT SECTION */    
+    /* MAIN TEXT SECTION */
     .text : ALIGN(4)
     {
         FILL(0xff)
         __vectors_start__ = ABSOLUTE(.) ;
         KEEP(*(.isr_vector))
-        
+
         /* Global Section Table */
         . = ALIGN(4) ;
         __section_table_start = .;
@@ -42,10 +42,10 @@ SECTIONS
         __bss_section_table_end = .;
         __section_table_end = . ;
         /* End of Global Section Table */
-        
+
 
         *(.after_vectors*)
-        
+
         /* Code Read Protect data */
         . = 0x000002FC ;
         PROVIDE(__CRP_WORD_START__ = .) ;
@@ -53,36 +53,36 @@ SECTIONS
         PROVIDE(__CRP_WORD_END__ = .) ;
         ASSERT(!(__CRP_WORD_START__ == __CRP_WORD_END__), "Linker CRP Enabled, but no CRP_WORD provided within application");
         /* End of Code Read Protect */
-        
+
     } >MFlash512
-    
-    .text : ALIGN(4)    
+
+    .text : ALIGN(4)
     {
          *(.text*)
         *(.rodata .rodata.* .constdata .constdata.*)
         . = ALIGN(4);
-        
+
     } > MFlash512
 
     /*
      * for exception handling/unwind - some Newlib functions (in common
-     * with C++ and STDC++) use this. 
+     * with C++ and STDC++) use this.
      */
     .ARM.extab : ALIGN(4)
     {
     	*(.ARM.extab* .gnu.linkonce.armextab.*)
     } > MFlash512
     __exidx_start = .;
-    
+
     .ARM.exidx : ALIGN(4)
     {
     	*(.ARM.exidx* .gnu.linkonce.armexidx.*)
     } > MFlash512
     __exidx_end = .;
-    
+
     _etext = .;
-        
-    
+
+
     /* DATA section for RamAHB32 */
     .data_RAM2 : ALIGN(4)
     {
@@ -95,9 +95,9 @@ SECTIONS
        . = ALIGN(4) ;
        PROVIDE(__end_data_RAM2 = .) ;
     } > RamAHB32 AT>MFlash512
-    
+
     /* MAIN DATA SECTION */
-    
+
 
     .uninit_RESERVED : ALIGN(4)
     {
@@ -106,7 +106,7 @@ SECTIONS
         _end_uninit_RESERVED = .;
     } > RamLoc32
 
-	
+
 	/* Main DATA section (RamLoc32) */
 	.data : ALIGN(4)
 	{
@@ -139,24 +139,24 @@ SECTIONS
         _ebss = .;
         PROVIDE(end = .);
     } > RamLoc32
-        
+
     /* NOINIT section for RamAHB32 */
     .noinit_RAM2 (NOLOAD) : ALIGN(4)
     {
     	*(.noinit.$RAM2*)
     	*(.noinit.$RamAHB32*)
        . = ALIGN(4) ;
-    } > RamAHB32 
-    
+    } > RamAHB32
+
     /* DEFAULT NOINIT SECTION */
     .noinit (NOLOAD): ALIGN(4)
     {
         _noinit = .;
-        *(.noinit*) 
+        *(.noinit*)
          . = ALIGN(4) ;
         _end_noinit = .;
     } > RamLoc32
-    
+
     PROVIDE(_pvHeapStart = DEFINED(__user_heap_base) ? __user_heap_base : .);
     PROVIDE(_vStackTop = DEFINED(__user_stack_top) ? __user_stack_top : __top_RamLoc32 - 0);
 }
