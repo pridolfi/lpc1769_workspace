@@ -47,12 +47,16 @@ all: $(APPLICATION)
 %.o: %.c
 	@echo "*** Compiling C file $< ***"
 	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
+	arm-none-eabi-gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(@:.o=.d)
 	@echo ""
 
 %.o: %.S
 	@echo "*** Compiling Assembly file $< ***"
 	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
+	arm-none-eabi-gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(@:.o=.d)
 	@echo ""
+
+-include $(wildcard $(OBJ_PATH)/*.d)
 
 $(APPLICATION): $(OBJS)
 	@echo "*** Linking project $(APPLICATION) ***"
