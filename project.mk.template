@@ -1,3 +1,8 @@
+################################################################################
+#                        DO NOT USE THIS FILE!                                 #
+#          Copy it to project.mk and use project.mk instead.                   #
+################################################################################
+
 # Application to be compiled
 PROJECT = examples/blink
 #PROJECT = examples/freertos_blink
