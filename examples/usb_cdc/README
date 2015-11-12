@@ -1,0 +1,9 @@
+Este proyecto está hecho con Makefiles propios y no con el asistente de LPCXpresso. Para importarlo:
+- Descomprimir la carpeta lcd_usb_rtos en una ubicación conocida.
+- En LPCXpresso, ir a File > New > Other y seleccionar "Makefile project with existing code"
+- En Project Name escribir "lcd_usb_rtos"
+- Con el botón Browse... navegar a la carpeta descomprimida, donde están las carpetas app, cfg, out y un archivo Makefile (entre otros).
+- Deseleccionar C++, seleccionar NXP MCU Tools
+- Compilar normalmente
+- Al debuguear se preguntará qué MCU usar, seleccionar LPC1769
+

@@ -1,5 +1,5 @@
 # Application to be compiled
-PROJECT_PATH := examples/freertos_blink
+PROJECT_PATH := examples/usb_cdc
 
 # Path for compiled files (libraries and binaries)
 OUT_PATH := out
@@ -53,7 +53,7 @@ all: $(APPLICATION)
 
 $(APPLICATION): $(OBJS)
 	@echo "*** Linking project $(APPLICATION) ***"
-	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(OBJ_FILES)
+	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(OBJ_FILES) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
 	arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
 	arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
 	@echo ""
