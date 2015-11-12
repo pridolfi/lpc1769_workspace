@@ -1,5 +1,14 @@
-# Application to be compiled
-PROJECT_PATH := examples/usb_cdc
+# Default application to be compiled
+PROJECT ?= examples/blink
+
+# Selected application by user
+include project.mk
+
+# include project Makefile
+include $(PROJECT)/Makefile
+
+# include modules Makefiles
+include $(foreach MOD,$(MODULES),modules/$(MOD)/Makefile)
 
 # Path for compiled files (libraries and binaries)
 OUT_PATH := out
@@ -18,12 +27,6 @@ LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PA
 
 # Linker scripts
 LD_FILE := -Tld/lpc17xx.ld
-
-# include project Makefile
-include $(PROJECT_PATH)/Makefile
-
-# include modules Makefiles
-include $(foreach MOD,$(MODULES),modules/$(MOD)/Makefile)
 
 # object files
 OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(C_FILES:.c=.o)))
@@ -79,3 +82,8 @@ info:
 	@echo OBJS: $(OBJS)
 	@echo INCLUDES: $(INCLUDES)
 	@echo SRC_FOLDERS: $(SRC_FOLDERS)
+
+help:
+	@echo Seleccionar la aplicación a compilar copiando project.mk.template a project.mk y modificando la variable PROJECT.
+	@echo Ejemplos disponibles:
+	@printf "\t$(sort $(notdir $(wildcard examples/*)))\n"

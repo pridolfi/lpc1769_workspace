@@ -1,0 +1,8 @@
+# Application to be compiled
+PROJECT = examples/blink
+#PROJECT = examples/freertos_blink
+#PROJECT = examples/tcpecho
+#PROJECT = examples/usb_cdc
+
+# Also you can select your own project
+#PROJECT = projects/your_project

@@ -1,3 +1,5 @@
 /*.launch
 /.project
 /.cproject
+project.mk
+projects/

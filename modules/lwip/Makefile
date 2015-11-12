@@ -6,8 +6,8 @@ C_FILES += $(wildcard modules/lwip/src/netif/*.c)
 
 INC_FOLDERS += modules/lwip/inc modules/lwip/inc/ipv4
 
-SRC_FOLDERS += modules/lwip/src/api 		\
-				modules/lwip/src/arch 		\
-				modules/lwip/src/core 		\
-				modules/lwip/src/core/ipv4 \
-				modules/lwip/src/netif
+SRC_FOLDERS += modules/lwip/src/api       \
+               modules/lwip/src/arch      \
+               modules/lwip/src/core      \
+               modules/lwip/src/core/ipv4 \
+               modules/lwip/src/netif
