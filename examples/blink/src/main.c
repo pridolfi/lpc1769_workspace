@@ -1,6 +1,7 @@
 /* Copyright 2015, Pablo Ridolfi
+ * All rights reserved.
  *
- * This file is part of TD2-Template.
+ * This file is part of lpc1769_template.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -30,28 +31,13 @@
  *
  */
 
-/** @brief This is a simple C example file.
- **
- **/
+/** @brief This is a simple blink example.
+ *
+ * It only blinks the LPCXpresso stick LED in P0.22 using SysTick for timestamp.
+ */
 
-/** \addtogroup TD2 Técnicas Digitales II
+ /** \addtogroup blink Bare-metal blink example
  ** @{ */
-
-/** @addtogroup App Aplicación de usuario
- * 	@{
- */
-
-/*
- * Initials     Name
- * ---------------------------
- * PR           Pablo Ridolfi
- */
-
-/*
- * modification history (new versions first)
- * -----------------------------------------------------------
- * 20150421 v0.0.1   PR first version
- */
 
 /*==================[inclusions]=============================================*/
 
@@ -69,8 +55,14 @@
  */
 static void initHardware(void);
 
+/** @brief delay function
+* @param t desired milliseconds to wait
+*/
+static void pausems(uint32_t t);
+
 /*==================[internal data definition]===============================*/
 
+/** @brief used for delay counter */
 static uint32_t pausems_count;
 
 /*==================[external data definition]===============================*/
@@ -93,14 +85,14 @@ static void pausems(uint32_t t)
    }
 }
 
+/*==================[external functions definition]==========================*/
+
 void SysTick_Handler(void)
 {
    if (pausems_count != 0) {
       pausems_count--;
    }
 }
-
-/*==================[external functions definition]==========================*/
 
 int main(void)
 {
