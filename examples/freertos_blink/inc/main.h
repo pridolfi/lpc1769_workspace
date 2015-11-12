@@ -1,6 +1,7 @@
 /* Copyright 2015, Pablo Ridolfi
- * 
- * This file is part of TD2-Template.
+ * All rights reserved.
+ *
+ * This file is part of lpc1769_template.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,26 +33,9 @@
 
 #ifndef _MAIN_H_
 #define _MAIN_H_
-/** @brief Brief for this header file.
- **
- ** Full description for this header file.
- **
- **/
 
-/** \addtogroup TD2 Técnicas Digitales II
+/** \addtogroup rtos_blink FreeRTOS blink example
  ** @{ */
-
-/*
- * Initials    Name
- * ---------------------------
- * PR          Pablo Ridolfi
- */
-
-/*
- * modification history (new versions first)
- * -----------------------------------------------------------
- * 20150421 v0.0.1 PR Initial release.
- */
 
 /*==================[inclusions]=============================================*/
 

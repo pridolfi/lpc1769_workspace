@@ -1,6 +1,7 @@
 /* Copyright 2015, Pablo Ridolfi
+ * All rights reserved.
  *
- * This file is part of TD2-Template.
+ * This file is part of lpc1769_template.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,24 +35,8 @@
  **
  **/
 
-/** \addtogroup TD2 Técnicas Digitales II
+/** \addtogroup rtos_blink FreeRTOS blink example
  ** @{ */
-
-/** @addtogroup App Aplicación de usuario
- * 	@{
- */
-
-/*
- * Initials     Name
- * ---------------------------
- * PR           Pablo Ridolfi
- */
-
-/*
- * modification history (new versions first)
- * -----------------------------------------------------------
- * 20150421 v0.0.1   PR first version
- */
 
 /*==================[inclusions]=============================================*/
 
@@ -91,15 +76,13 @@ static void initHardware(void)
 
 static void task(void * a)
 {
-	while(1)
-	{
+	while (1) {
 		Board_LED_Toggle(0);
 		vTaskDelay(500 / portTICK_RATE_MS);
 	}
 }
 
 /*==================[external functions definition]==========================*/
-
 
 int main(void)
 {
@@ -109,12 +92,10 @@ int main(void)
 
 	vTaskStartScheduler();
 
-	while(1)
-	{
+	while (1) {
 	}
 }
 
-/** @} doxygen end group definition */
 /** @} doxygen end group definition */
 
 /*==================[end of file]============================================*/

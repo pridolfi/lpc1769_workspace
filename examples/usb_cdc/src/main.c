@@ -1,6 +1,8 @@
 /* Copyright 2015, Pablo Ridolfi
  * All rights reserved.
  *
+ * This file is part of lpc1769_template.
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
@@ -33,24 +35,8 @@
  **
  **/
 
-/** \addtogroup TD2 Técnicas Digitales II
+/** \addtogroup usb_cdc CDC+LCD+FreeRTOS example
  ** @{ */
-
-/** @addtogroup App Aplicación de usuario
- * 	@{
- */
-
-/*
- * Initials     Name
- * ---------------------------
- * PR           Pablo Ridolfi
- */
-
-/*
- * modification history (new versions first)
- * -----------------------------------------------------------
- * 20151013 v0.0.1   PR first version
- */
 
 /*==================[inclusions]=============================================*/
 
@@ -188,7 +174,6 @@ void EINT3_IRQHandler(void)
 	portEND_SWITCHING_ISR(xSwitchRequired);
 }
 
-/** @} doxygen end group definition */
 /** @} doxygen end group definition */
 
 /*==================[end of file]============================================*/
