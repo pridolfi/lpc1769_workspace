@@ -2,7 +2,7 @@
 PROJECT ?= examples/blink
 
 # Selected application by user
-include project.mk
+-include project.mk
 
 # include project Makefile
 include $(PROJECT)/Makefile

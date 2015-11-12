@@ -2,7 +2,8 @@
 APPLICATION := tcpecho
 
 # Modules needed by the application
-MODULES := 	lpc_chip_175x_6x \
+MODULES := 	base \
+            lpc_chip_175x_6x \
 				lpc_board_nxp_lpcxpresso_1769 \
 				freertos \
 				lwip
