@@ -32,6 +32,9 @@
 # Default application to be compiled
 PROJECT ?= examples/blink
 
+# Default cross-toolchain
+CROSS_PREFIX ?= arm-none-eabi-
+
 # Selected application by user
 -include project.mk
 
@@ -81,29 +84,29 @@ all: $(APPLICATION)
 define makemod
 lib$(1).a: $(2)
 	@echo "*** Archiving module $(1) ***"
-	@arm-none-eabi-ar -r $(OUT_PATH)/lib$(1).a $(addprefix $(OBJ_PATH)/,$(2))
-	@arm-none-eabi-size $(OUT_PATH)/lib$(1).a
+	@$(CROSS_PREFIX)ar rcs $(OUT_PATH)/lib$(1).a $(addprefix $(OBJ_PATH)/,$(2))
+	@$(CROSS_PREFIX)size $(OUT_PATH)/lib$(1).a
 endef
 
 $(foreach MOD,$(MODULES), $(eval $(call makemod,$(MOD),$(notdir $($(MOD)_C_FILES:.c=.o)))))
 
 %.o: %.c
 	@echo "*** Compiling C file $< ***"
-	@arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$(notdir $@)
-	@arm-none-eabi-gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(notdir $(@:.o=.d))
+	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$(notdir $@)
+	@$(CROSS_PREFIX)gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(notdir $(@:.o=.d))
 
 %.o: %.S
 	@echo "*** Compiling Assembly file $< ***"
-	@arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
-	@arm-none-eabi-gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(@:.o=.d)
+	@$(CROSS_PREFIX)gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
+	@$(CROSS_PREFIX)gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(@:.o=.d)
 
 -include $(wildcard $(OBJ_PATH)/*.d)
 
 $(APPLICATION): $(APP_OBJS) $(foreach MOD,$(MODULES),lib$(MOD).a)
 	@echo "*** Linking project $(APPLICATION) ***"
-	@arm-none-eabi-gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(APP_OBJ_FILES) -L$(OUT_PATH) $(addprefix -l,$(MODULES)) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
-	@arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
-	@arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
+	@$(CROSS_PREFIX)gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(APP_OBJ_FILES) -L$(OUT_PATH) $(addprefix -l,$(MODULES)) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
+	@$(CROSS_PREFIX)size $(OUT_PATH)/$(APPLICATION).axf
+	@$(CROSS_PREFIX)objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
 	@echo ""
 
 # Clean rule: remove generated files and objects
