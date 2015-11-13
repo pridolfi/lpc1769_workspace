@@ -59,41 +59,51 @@ LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PA
 # Linker scripts
 LD_FILE := -Tld/lpc17xx.ld
 
-# object files
-OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(C_FILES:.c=.o)))
-OBJ_FILES += $(addprefix $(OBJ_PATH)/,$(notdir $(ASM_FILES:.S=.o)))
-OBJS := $(notdir $(OBJ_FILES))
+# application object files
+APP_OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(APP_C_FILES:.c=.o)))
+APP_OBJ_FILES += $(addprefix $(OBJ_PATH)/,$(notdir $(APP_ASM_FILES:.S=.o)))
+APP_OBJS := $(notdir $(APP_OBJ_FILES))
 
 # include paths
-INCLUDES := $(addprefix -I,$(INC_FOLDERS))
+INCLUDES := $(addprefix -I,$(APP_INC_FOLDERS))
+INCLUDES += $(addprefix -I,$(foreach MOD,$(MODULES),$($(MOD)_INC_FOLDERS)))
 
 # Add object path to search paths
 vpath %.o $(OBJ_PATH)
-vpath %.c $(SRC_FOLDERS)
-vpath %.S $(SRC_FOLDERS)
+vpath %.c $(APP_SRC_FOLDERS) $(foreach MOD,$(MODULES),$($(MOD)_SRC_FOLDERS))
+vpath %.S $(APP_SRC_FOLDERS) $(foreach MOD,$(MODULES),$($(MOD)_SRC_FOLDERS))
+vpath %.a $(OUT_PATH)
 
 # All rule: Compile all libs and executables
 all: $(APPLICATION)
 
+# rule to make modules
+define makemod
+lib$(1).a: $(2)
+	@echo "*** Archiving module $(1) ***"
+	@arm-none-eabi-ar -r $(OUT_PATH)/lib$(1).a $(addprefix $(OBJ_PATH)/,$(2))
+	@arm-none-eabi-size $(OUT_PATH)/lib$(1).a
+endef
+
+$(foreach MOD,$(MODULES), $(eval $(call makemod,$(MOD),$(notdir $($(MOD)_C_FILES:.c=.o)))))
+
 %.o: %.c
 	@echo "*** Compiling C file $< ***"
-	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
-	arm-none-eabi-gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(@:.o=.d)
-	@echo ""
+	@arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$(notdir $@)
+	@arm-none-eabi-gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(notdir $(@:.o=.d))
 
 %.o: %.S
 	@echo "*** Compiling Assembly file $< ***"
-	arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
-	arm-none-eabi-gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(@:.o=.d)
-	@echo ""
+	@arm-none-eabi-gcc $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< -o $(OBJ_PATH)/$@
+	@arm-none-eabi-gcc -MM $(SYMBOLS) $(INCLUDES) $(CFLAGS) $< > $(OBJ_PATH)/$(@:.o=.d)
 
 -include $(wildcard $(OBJ_PATH)/*.d)
 
-$(APPLICATION): $(OBJS)
+$(APPLICATION): $(APP_OBJS) $(foreach MOD,$(MODULES),lib$(MOD).a)
 	@echo "*** Linking project $(APPLICATION) ***"
-	arm-none-eabi-gcc $(LIB_PATH) $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(OBJ_FILES) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
-	arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
-	arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
+	@arm-none-eabi-gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(APP_OBJ_FILES) -L$(OUT_PATH) $(addprefix -l,$(MODULES)) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
+	@arm-none-eabi-size $(OUT_PATH)/$(APPLICATION).axf
+	@arm-none-eabi-objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
 	@echo ""
 
 # Clean rule: remove generated files and objects
@@ -113,8 +123,8 @@ erase:
 	@echo "Erase done."
 
 info:
-	@echo C_FILES: $(C_FILES)
-	@echo OBJ_FILES: $(OBJ_FILES)
+	@echo MODULES: $(MODULES)
+	@echo SRC_FOLDERS: $(foreach MOD,$(MODULES),$($(MOD)_SRC_FOLDERS))
 	@echo OBJS: $(OBJS)
 	@echo INCLUDES: $(INCLUDES)
 	@echo SRC_FOLDERS: $(SRC_FOLDERS)

@@ -67,4 +67,3 @@ int main(void);
 /** @} doxygen end group definition */
 /*==================[end of file]============================================*/
 #endif /* #ifndef _MAIN_H_ */
-

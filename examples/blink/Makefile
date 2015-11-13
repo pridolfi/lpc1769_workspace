@@ -34,15 +34,15 @@ APPLICATION := blink
 
 # Modules needed by the application
 MODULES := 	base \
-            lpc_chip_175x_6x \
-            lpc_board_nxp_lpcxpresso_1769
+				lpc_board_nxp_lpcxpresso_1769 \
+				lpc_chip_175x_6x
 
 # source files folder
-SRC_FOLDERS += examples/$(APPLICATION)/src
+APP_SRC_FOLDERS := examples/$(APPLICATION)/src
 
 # header files folder
-INC_FOLDERS += examples/$(APPLICATION)/inc
+APP_INC_FOLDERS := examples/$(APPLICATION)/inc
 
 # source files
-C_FILES += $(wildcard examples/$(APPLICATION)/src/*.c)
-ASM_FILES += $(wildcard examples/$(APPLICATION)/src/*.S)
+APP_C_FILES := $(wildcard examples/$(APPLICATION)/src/*.c)
+APP_ASM_FILES := $(wildcard examples/$(APPLICATION)/src/*.S)

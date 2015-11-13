@@ -101,7 +101,7 @@ int main(void)
 	while(1)
 	{
       Board_LED_Toggle(0);
-      pausems(500);
+      pausems(DELAY_MS);
 	}
 }
 

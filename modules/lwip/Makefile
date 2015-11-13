@@ -29,15 +29,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-C_FILES += $(wildcard modules/lwip/src/api/*.c)
-C_FILES += $(wildcard modules/lwip/src/arch/*.c)
-C_FILES += $(wildcard modules/lwip/src/core/*.c)
-C_FILES += $(wildcard modules/lwip/src/core/ipv4/*.c)
-C_FILES += $(wildcard modules/lwip/src/netif/*.c)
+lwip_C_FILES += $(wildcard modules/lwip/src/api/*.c)
+lwip_C_FILES += $(wildcard modules/lwip/src/arch/*.c)
+lwip_C_FILES += $(wildcard modules/lwip/src/core/*.c)
+lwip_C_FILES += $(wildcard modules/lwip/src/core/ipv4/*.c)
+lwip_C_FILES += $(wildcard modules/lwip/src/netif/*.c)
 
-INC_FOLDERS += modules/lwip/inc modules/lwip/inc/ipv4
+lwip_INC_FOLDERS += modules/lwip/inc modules/lwip/inc/ipv4
 
-SRC_FOLDERS += modules/lwip/src/api       \
+lwip_SRC_FOLDERS += modules/lwip/src/api       \
                modules/lwip/src/arch      \
                modules/lwip/src/core      \
                modules/lwip/src/core/ipv4 \

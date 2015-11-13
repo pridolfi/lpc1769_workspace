@@ -50,9 +50,6 @@
 #include "lpc_phy.h"/* For the PHY monitor support */
 #include "tcpecho.h"
 
-#include "lwip/ip_addr.h"
-
-#define config_ETHERNET_INTERRUPT_PRIORITY (configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1)
 
 /*****************************************************************************
  * Private types/enumerations/variables
@@ -217,7 +214,7 @@ int main(void)
 	/* Add another thread for initializing physical interface. This
 	   is delayed from the main LWIP initialization. */
 	xTaskCreate(vSetupIFTask, (signed char *) "SetupIFx",
-				1024, NULL, (tskIDLE_PRIORITY + 1UL),
+				configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
 				(xTaskHandle *) NULL);
 
 	/* Start the scheduler */

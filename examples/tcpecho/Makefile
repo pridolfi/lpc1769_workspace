@@ -33,18 +33,18 @@
 APPLICATION := tcpecho
 
 # Modules needed by the application
-MODULES := 	base \
-            lpc_chip_175x_6x \
-				lpc_board_nxp_lpcxpresso_1769 \
-				freertos \
-				lwip
+MODULES := lwip \
+			  freertos \
+			  base \
+			  lpc_board_nxp_lpcxpresso_1769 \
+			  lpc_chip_175x_6x
 
 # source files folder
-SRC_FOLDERS += examples/tcpecho/src
+APP_SRC_FOLDERS += examples/tcpecho/src
 
 # header files folder
-INC_FOLDERS += examples/tcpecho/inc
+APP_INC_FOLDERS += examples/tcpecho/inc
 
 # source files
-C_FILES += $(wildcard examples/tcpecho/src/*.c)
-ASM_FILES += $(wildcard examples/tcpecho/src/*.S)
+APP_C_FILES += $(wildcard examples/tcpecho/src/*.c)
+APP_ASM_FILES += $(wildcard examples/tcpecho/src/*.S)
