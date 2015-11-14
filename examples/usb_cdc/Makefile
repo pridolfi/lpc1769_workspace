@@ -38,12 +38,15 @@ MODULES := freertos \
 			  lpc_board_nxp_lpcxpresso_1769 \
 			  lpc_chip_175x_6x
 
+# application relative path
+APP_PATH := examples/$(APPLICATION)
+
 # source files folder
-APP_SRC_FOLDERS += examples/usb_cdc/src
+APP_SRC_FOLDERS := $(APP_PATH)/src
 
 # header files folder
-APP_INC_FOLDERS += examples/usb_cdc/inc
+APP_INC_FOLDERS := $(APP_PATH)/inc
 
 # source files
-APP_C_FILES += $(wildcard examples/usb_cdc/src/*.c)
-APP_ASM_FILES += $(wildcard examples/usb_cdc/src/*.S)
+APP_C_FILES := $(wildcard $(APP_PATH)/src/*.c)
+APP_ASM_FILES := $(wildcard $(APP_PATH)/src/*.S)

@@ -29,8 +29,10 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-freertos_C_FILES += $(wildcard modules/freertos/src/*.c)
+freertos_PATH := modules/freertos
 
-freertos_SRC_FOLDERS += modules/freertos/src
+freertos_C_FILES += $(wildcard $(freertos_PATH)/src/*.c)
 
-freertos_INC_FOLDERS += modules/freertos/inc
+freertos_SRC_FOLDERS += $(freertos_PATH)/src
+
+freertos_INC_FOLDERS += $(freertos_PATH)/inc

@@ -29,8 +29,10 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-base_C_FILES := $(wildcard modules/base/src/*.c)
+base_PATH := modules/base
 
-base_INC_FOLDERS := modules/base/inc
+base_C_FILES := $(wildcard $(base_PATH)/src/*.c)
 
-base_SRC_FOLDERS := modules/base/src
+base_INC_FOLDERS := $(base_PATH)/inc
+
+base_SRC_FOLDERS := $(base_PATH)/src

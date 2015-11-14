@@ -29,16 +29,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-lwip_C_FILES += $(wildcard modules/lwip/src/api/*.c)
-lwip_C_FILES += $(wildcard modules/lwip/src/arch/*.c)
-lwip_C_FILES += $(wildcard modules/lwip/src/core/*.c)
-lwip_C_FILES += $(wildcard modules/lwip/src/core/ipv4/*.c)
-lwip_C_FILES += $(wildcard modules/lwip/src/netif/*.c)
+lwip_PATH := modules/lwip
 
-lwip_INC_FOLDERS += modules/lwip/inc modules/lwip/inc/ipv4
+lwip_C_FILES += $(wildcard $(lwip_PATH)/src/api/*.c)
+lwip_C_FILES += $(wildcard $(lwip_PATH)/src/arch/*.c)
+lwip_C_FILES += $(wildcard $(lwip_PATH)/src/core/*.c)
+lwip_C_FILES += $(wildcard $(lwip_PATH)/src/core/ipv4/*.c)
+lwip_C_FILES += $(wildcard $(lwip_PATH)/src/netif/*.c)
 
-lwip_SRC_FOLDERS += modules/lwip/src/api       \
-               modules/lwip/src/arch      \
-               modules/lwip/src/core      \
-               modules/lwip/src/core/ipv4 \
-               modules/lwip/src/netif
+lwip_INC_FOLDERS += $(lwip_PATH)/inc $(lwip_PATH)/inc/ipv4
+
+lwip_SRC_FOLDERS += $(lwip_PATH)/src/api  \
+               $(lwip_PATH)/src/arch      \
+               $(lwip_PATH)/src/core      \
+               $(lwip_PATH)/src/core/ipv4 \
+               $(lwip_PATH)/src/netif

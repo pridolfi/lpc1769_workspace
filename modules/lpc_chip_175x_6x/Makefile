@@ -29,13 +29,15 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-lpc_chip_175x_6x_C_FILES := $(wildcard modules/lpc_chip_175x_6x/src/*.c)
+lpc_chip_175x_6x_PATH := modules/lpc_chip_175x_6x
 
-lpc_chip_175x_6x_INC_FOLDERS := modules/lpc_chip_175x_6x/inc \
-					modules/lpc_chip_175x_6x/inc/usbd
+lpc_chip_175x_6x_C_FILES := $(wildcard $(lpc_chip_175x_6x_PATH)/src/*.c)
 
-lpc_chip_175x_6x_SRC_FOLDERS := modules/lpc_chip_175x_6x/src
+lpc_chip_175x_6x_INC_FOLDERS := $(lpc_chip_175x_6x_PATH)/inc \
+										  $(lpc_chip_175x_6x_PATH)/inc/usbd
 
-LIBS_FOLDERS += modules/lpc_chip_175x_6x/libs
+lpc_chip_175x_6x_SRC_FOLDERS := $(lpc_chip_175x_6x_PATH)/src
+
+LIBS_FOLDERS += $(lpc_chip_175x_6x_PATH)/libs
 
 LIBS += usbd_175x_6x_lib
