@@ -42,7 +42,7 @@ CROSS_PREFIX ?= arm-none-eabi-
 include $(PROJECT)/Makefile
 
 # include modules Makefiles
-include $(foreach MOD,$(MODULES),modules/$(MOD)/Makefile)
+include $(foreach MOD,$(MODULES),$(MOD)/Makefile)
 
 # Path for compiled files (libraries and binaries)
 OUT_PATH := out
@@ -69,12 +69,12 @@ APP_OBJS := $(notdir $(APP_OBJ_FILES))
 
 # include paths
 INCLUDES := $(addprefix -I,$(APP_INC_FOLDERS))
-INCLUDES += $(addprefix -I,$(foreach MOD,$(MODULES),$($(MOD)_INC_FOLDERS)))
+INCLUDES += $(addprefix -I,$(foreach MOD,$(notdir $(MODULES)),$($(MOD)_INC_FOLDERS)))
 
 # Add object path to search paths
 vpath %.o $(OBJ_PATH)
-vpath %.c $(APP_SRC_FOLDERS) $(foreach MOD,$(MODULES),$($(MOD)_SRC_FOLDERS))
-vpath %.S $(APP_SRC_FOLDERS) $(foreach MOD,$(MODULES),$($(MOD)_SRC_FOLDERS))
+vpath %.c $(APP_SRC_FOLDERS) $(foreach MOD,$(notdir $(MODULES)),$($(MOD)_SRC_FOLDERS))
+vpath %.S $(APP_SRC_FOLDERS) $(foreach MOD,$(notdir $(MODULES)),$($(MOD)_SRC_FOLDERS))
 vpath %.a $(OUT_PATH)
 
 # All rule: Compile all libs and executables
@@ -88,7 +88,7 @@ lib$(1).a: $(2)
 	@$(CROSS_PREFIX)size $(OUT_PATH)/lib$(1).a
 endef
 
-$(foreach MOD,$(MODULES), $(eval $(call makemod,$(MOD),$(notdir $($(MOD)_C_FILES:.c=.o)))))
+$(foreach MOD,$(notdir $(MODULES)), $(eval $(call makemod,$(MOD),$(notdir $($(MOD)_C_FILES:.c=.o)))))
 
 %.o: %.c
 	@echo "*** Compiling C file $< ***"
@@ -102,9 +102,9 @@ $(foreach MOD,$(MODULES), $(eval $(call makemod,$(MOD),$(notdir $($(MOD)_C_FILES
 
 -include $(wildcard $(OBJ_PATH)/*.d)
 
-$(APPLICATION): $(APP_OBJS) $(foreach MOD,$(MODULES),lib$(MOD).a)
+$(APPLICATION): $(APP_OBJS) $(foreach MOD,$(notdir $(MODULES)),lib$(MOD).a)
 	@echo "*** Linking project $(APPLICATION) ***"
-	@$(CROSS_PREFIX)gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(APP_OBJ_FILES) -L$(OUT_PATH) $(addprefix -l,$(MODULES)) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
+	@$(CROSS_PREFIX)gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(APP_OBJ_FILES) -L$(OUT_PATH) $(addprefix -l,$(notdir $(MODULES))) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
 	@$(CROSS_PREFIX)size $(OUT_PATH)/$(APPLICATION).axf
 	@$(CROSS_PREFIX)objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
 	@echo ""
@@ -126,8 +126,8 @@ erase:
 	@echo "Erase done."
 
 info:
-	@echo MODULES: $(MODULES)
-	@echo SRC_FOLDERS: $(foreach MOD,$(MODULES),$($(MOD)_SRC_FOLDERS))
+	@echo MODULES: $(notdir $(MODULES))
+	@echo SRC_FOLDERS: $(foreach MOD,$(notdir $(MODULES)),$($(MOD)_SRC_FOLDERS))
 	@echo OBJS: $(OBJS)
 	@echo INCLUDES: $(INCLUDES)
 	@echo SRC_FOLDERS: $(SRC_FOLDERS)

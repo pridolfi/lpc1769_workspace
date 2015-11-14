@@ -33,9 +33,9 @@
 APPLICATION := blink
 
 # Modules needed by the application
-MODULES := 	base \
-				lpc_board_nxp_lpcxpresso_1769 \
-				lpc_chip_175x_6x
+MODULES := 	modules/base \
+				modules/lpc_board_nxp_lpcxpresso_1769 \
+				modules/lpc_chip_175x_6x
 
 # application relative path
 APP_PATH := examples/$(APPLICATION)
