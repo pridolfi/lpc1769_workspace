@@ -107,6 +107,7 @@ $(APPLICATION): $(APP_OBJS) $(foreach MOD,$(notdir $(MODULES)),lib$(MOD).a)
 	@$(CROSS_PREFIX)gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(APP_OBJ_FILES) -L$(OUT_PATH) $(addprefix -l,$(notdir $(MODULES))) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
 	@$(CROSS_PREFIX)size $(OUT_PATH)/$(APPLICATION).axf
 	@$(CROSS_PREFIX)objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
+	@make ctags
 	@echo ""
 
 # Clean rule: remove generated files and objects
@@ -131,6 +132,10 @@ info:
 	@echo OBJS: $(OBJS)
 	@echo INCLUDES: $(INCLUDES)
 	@echo SRC_FOLDERS: $(SRC_FOLDERS)
+
+ctags: ./tags
+	@echo "Generating tags file"
+	@ctags -R .
 
 help:
 	@echo Seleccionar la aplicación a compilar copiando project.mk.template a project.mk y modificando la variable PROJECT.
