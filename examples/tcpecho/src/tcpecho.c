@@ -69,6 +69,15 @@ tcpecho_thread(void *arg)
         /*printf("Recved\n");*/
         do {
              netbuf_data(buf, &data, &len);
+
+             u16_t i;
+             for (i=0; i<len; i++) {
+                if ( (((char*)data)[i] >= 'a') && (((char*)data)[i] <= 'z') ) {
+                   ((char*)data)[i] -= 'a';
+                   ((char*)data)[i] += 'A';
+                }
+             }
+
              err = netconn_write(newconn, data, len, NETCONN_COPY);
 #if 0
             if (err != ERR_OK) {
