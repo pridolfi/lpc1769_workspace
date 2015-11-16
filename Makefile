@@ -32,9 +32,6 @@
 # Default application to be compiled
 PROJECT ?= examples/blink
 
-# Default cross-toolchain
-CROSS_PREFIX ?= arm-none-eabi-
-
 # Selected application by user
 -include project.mk
 
@@ -50,17 +47,8 @@ OUT_PATH := out
 # Path for object files
 OBJ_PATH := $(OUT_PATH)/obj
 
-# Defined symbols
-SYMBOLS := -DDEBUG -DCORE_M3 -D__USE_LPCOPEN -D__LPC17XX__ -D__CODE_RED
-
-# Compilation flags
-CFLAGS  := -Wall -ggdb3 -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections -c
-
-# Linking flags
-LFLAGS  := -nostdlib -fno-builtin -mcpu=cortex-m3 -mthumb -Xlinker -Map=$(OUT_PATH)/$(APPLICATION).map -Wl,--gc-sections
-
-# Linker scripts
-LD_FILE := -Tld/lpc17xx.ld
+# include target Makefile
+include target.mk
 
 # application object files
 APP_OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(APP_C_FILES:.c=.o)))
@@ -107,8 +95,7 @@ $(APPLICATION): $(APP_OBJS) $(foreach MOD,$(notdir $(MODULES)),lib$(MOD).a)
 	@$(CROSS_PREFIX)gcc $(LFLAGS) $(LD_FILE) -o $(OUT_PATH)/$(APPLICATION).axf $(APP_OBJ_FILES) -L$(OUT_PATH) $(addprefix -l,$(notdir $(MODULES))) $(addprefix -L,$(LIBS_FOLDERS)) $(addprefix -l,$(LIBS))
 	@$(CROSS_PREFIX)size $(OUT_PATH)/$(APPLICATION).axf
 	@$(CROSS_PREFIX)objcopy -v -O binary $(OUT_PATH)/$(APPLICATION).axf $(OUT_PATH)/$(APPLICATION).bin
-	@make ctags
-	@echo ""
+	@make --no-print-directory ctags
 
 # Clean rule: remove generated files and objects
 clean:
@@ -117,13 +104,13 @@ clean:
 	rm -f *.launch
 
 download: $(APPLICATION)
-	@echo "Downloading $(APPLICATION).bin to LPC1769..."
-	openocd -f cfg/lpc1769.cfg -c "init" -c "halt 0" -c "flash write_image erase unlock $(OUT_PATH)/$(APPLICATION).bin 0x00000000 bin" -c "reset run" -c "shutdown"
+	@echo "Downloading $(APPLICATION).bin to $(TARGET_NAME)..."
+	openocd -f $(CFG_FILE) -c "init" -c "halt 0" -c "flash write_image erase unlock $(OUT_PATH)/$(APPLICATION).bin $(BASE_ADDR) bin" -c "reset run" -c "shutdown"
 	@echo "Download done."
 
 erase:
 	@echo "Erasing flash memory..."
-	openocd -f cfg/lpc1769.cfg -c "init" -c "halt 0" -c "flash erase_sector 0 0 last" -c "exit"
+	openocd -f $(CFG_FILE) -c "init" -c "halt 0" -c "flash erase_sector 0 0 last" -c "exit"
 	@echo "Erase done."
 
 info:
