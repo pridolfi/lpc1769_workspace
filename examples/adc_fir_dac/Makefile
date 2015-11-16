@@ -1,7 +1,3 @@
-################################################################################
-#                        DO NOT USE THIS FILE!                                 #
-#          Copy it to project.mk and use project.mk instead.                   #
-################################################################################
 # Copyright 2015, Pablo Ridolfi
 # All rights reserved.
 #
@@ -33,13 +29,23 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# Application to be compiled
-#PROJECT = examples/adc_fir_dac
-PROJECT = examples/blink
-#PROJECT = examples/freertos_blink
-#PROJECT = examples/pwm
-#PROJECT = examples/tcpecho
-#PROJECT = examples/usb_cdc
+# application name
+APPLICATION := adc_fir_dac
 
-# Also you can select your own project
-#PROJECT = projects/your_project
+# Modules needed by the application
+MODULES := 	modules/base \
+				modules/lpc_board_nxp_lpcxpresso_1769 \
+				modules/lpc_chip_175x_6x
+
+# application relative path
+APP_PATH := examples/$(APPLICATION)
+
+# source files folder
+APP_SRC_FOLDERS := $(APP_PATH)/src
+
+# header files folder
+APP_INC_FOLDERS := $(APP_PATH)/inc
+
+# source files
+APP_C_FILES := $(wildcard $(APP_PATH)/src/*.c)
+APP_ASM_FILES := $(wildcard $(APP_PATH)/src/*.S)
