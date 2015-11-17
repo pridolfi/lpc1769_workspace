@@ -32,15 +32,6 @@
 # Default application to be compiled
 PROJECT ?= examples/blink
 
-# Selected application by user
--include project.mk
-
-# include project Makefile
-include $(PROJECT)/Makefile
-
-# include modules Makefiles
-include $(foreach MOD,$(MODULES),$(MOD)/Makefile)
-
 # Path for compiled files (libraries and binaries)
 OUT_PATH := out
 
@@ -49,6 +40,15 @@ OBJ_PATH := $(OUT_PATH)/obj
 
 # include target Makefile
 include target.mk
+
+# Selected application by user
+-include project.mk
+
+# include project Makefile
+include $(PROJECT)/Makefile
+
+# include modules Makefiles
+include $(foreach MOD,$(MODULES),$(MOD)/Makefile)
 
 # application object files
 APP_OBJ_FILES := $(addprefix $(OBJ_PATH)/,$(notdir $(APP_C_FILES:.c=.o)))
@@ -105,7 +105,7 @@ clean:
 
 download: $(APPLICATION)
 	@echo "Downloading $(APPLICATION).bin to $(TARGET_NAME)..."
-	openocd -f $(CFG_FILE) -c "init" -c "halt 0" -c "flash write_image erase unlock $(OUT_PATH)/$(APPLICATION).bin $(BASE_ADDR) bin" -c "reset run" -c "shutdown"
+	openocd -f $(CFG_FILE) -c "init" -c "reset halt" -c "flash write_image erase unlock $(OUT_PATH)/$(APPLICATION).bin $(BASE_ADDR) bin" -c "reset halt" -c "resume" -c "shutdown"
 	@echo "Download done."
 
 erase:

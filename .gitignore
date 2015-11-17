@@ -4,3 +4,4 @@
 project.mk
 projects/
 /tags
+.settings

@@ -174,5 +174,6 @@ void Chip_SetupXtalClocking(void)
 void Chip_SystemInit(void)
 {
 	/* Setup Chip clocking */
-	Chip_SetupIrcClocking();
+	//Chip_SetupIrcClocking();
+   Chip_SetupXtalClocking();
 }
