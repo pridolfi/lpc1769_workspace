@@ -120,7 +120,7 @@ info:
 	@echo INCLUDES: $(INCLUDES)
 	@echo SRC_FOLDERS: $(SRC_FOLDERS)
 
-ctags: ./tags
+ctags:
 	@echo "Generating tags file"
 	@ctags -R .
 
